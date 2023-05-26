@@ -67,9 +67,19 @@ public class BlackJack {
 		cardDeck.put("♠K", 10);
 		cardDeck.put("♠ACE", 11);
 	}
+	public static int currentPoint(
+			ArrayList<Integer> playingDeck,
+			int currentPoint
+			) {
+		for(int i = 0;i<playingDeck.size();i++) {
+			currentPoint += playingDeck.get(i);
+		}
+		return currentPoint;
+	}
 	public static void hit(
 			HashMap<String, Integer> cardDeck, 
-			ArrayList<Integer> playingDeck
+			ArrayList<Integer> playingDeck,
+			int currentPoint
 			) {
 		Random randomNum = new Random();
 		Set<String> keySet = cardDeck.keySet();
@@ -95,31 +105,10 @@ public class BlackJack {
 			ArrayList<Integer> cardHands
 			) {
 		System.out.print("Dealer: ? ");
-		for (int i = 0; i < cardHands.size(); i++) {
+		for (int i = 1; i < cardHands.size(); i++) {
 			System.out.print(cardHands.get(i) + " ");
 		}
 		System.out.println();
-	}
-	public static void opening(
-			HashMap<String, Integer> cardDeck, 
-			ArrayList<Integer> dealerDeck,
-			ArrayList<Integer> playerDeck
-			) {
-		hit(cardDeck, dealerDeck);
-		hit(cardDeck, playerDeck);
-		hit(cardDeck, dealerDeck);
-		hit(cardDeck, playerDeck);
-
-		showDealerCards(dealerDeck);
-		showPlayerCards(playerDeck);
-	}
-	public static int pointCalculator (ArrayList<Integer> cardHands) {
-		int point = 0;
-		for(int i = 0;i<cardHands.size();i++) {
-			
-		}
-		//카드 더해서 포인트로 반환
-		return point;
 	}
 	
 	public static void main(String[] args) {
@@ -142,14 +131,23 @@ public class BlackJack {
 			case 1:
 				ArrayList<Integer> dealerDeck = new ArrayList<>();
 				ArrayList<Integer> playerDeck = new ArrayList<>();
-				int dealerPoint = pointCalculator(dealerDeck);
-				int playerPoint = pointCalculator(playerDeck);
+				int dealerPoint = 0;
+				int playerPoint = 0;
 
 				System.out.println("베팅 금액을 설정해주세요.");
 				System.out.print(">>> ");
 				int placedBet = sc.nextInt();
 
-				opening(cardDeck, dealerDeck, playerDeck);
+				hit(cardDeck, dealerDeck, dealerPoint);
+				hit(cardDeck, playerDeck, playerPoint);
+				hit(cardDeck, dealerDeck, dealerPoint);
+				hit(cardDeck, playerDeck, playerPoint);
+
+				showDealerCards(dealerDeck);
+				showPlayerCards(playerDeck);
+
+				System.out.println(currentPoint(playerDeck, playerPoint));
+				System.out.println(currentPoint(dealerDeck, dealerPoint));
 
 				break;
 			case 2:
