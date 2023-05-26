@@ -8,7 +8,9 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class BlackJack {
-	public static void putCard(HashMap<String, Integer> cardDeck) {
+	public static void putCard(
+			HashMap<String, Integer> cardDeck
+			) {
 		cardDeck.put("♣2", 2);
 		cardDeck.put("♣3", 3);
 		cardDeck.put("♣4", 4);
@@ -65,13 +67,10 @@ public class BlackJack {
 		cardDeck.put("♠K", 10);
 		cardDeck.put("♠ACE", 11);
 	}
-
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-
-		HashMap<String, Integer> cardDeck = new HashMap<>();
-		putCard(cardDeck);
-
+	public static void hit(
+			HashMap<String, Integer> cardDeck, 
+			ArrayList<Integer> playingDeck
+			) {
 		Random randomNum = new Random();
 		Set<String> keySet = cardDeck.keySet();
 		List<String> keyList = new ArrayList<>(keySet);
@@ -80,6 +79,54 @@ public class BlackJack {
 		int numberOfCards = randomNum.nextInt(size);
 		String randomKey = keyList.get(numberOfCards);
 		Integer randomVal = cardDeck.get(randomKey);
+
+		playingDeck.add(randomVal);
+	}
+	public static void showPlayerCards(
+			ArrayList<Integer> cardHands
+			) {
+		System.out.print("Player: ");
+		for (int i = 0; i < cardHands.size(); i++) {
+			if(i>=cardHands.size()) {
+				System.out.print(cardHands.get(i));
+			}else {
+				System.out.print(cardHands.get(i)+", ");
+			}
+		}
+		System.out.println();
+	}
+	public static void showDealerCards(
+			ArrayList<Integer> cardHands
+			) {
+		System.out.print("Dealer: ?, ");
+		for (int i = 0; i < cardHands.size(); i++) {
+			if(i>=cardHands.size()) {
+				System.out.print(cardHands.get(i));
+			}else {
+				System.out.print(cardHands.get(i)+", ");
+			}
+		}
+		System.out.println();
+	}
+	public static void opening(
+			HashMap<String, Integer> cardDeck,
+			ArrayList<Integer> dealerDeck,
+			ArrayList<Integer> playerDeck
+			) {
+		hit(cardDeck, dealerDeck);
+		hit(cardDeck, playerDeck);
+		hit(cardDeck, dealerDeck);
+		hit(cardDeck, playerDeck);
+
+		showDealerCards(dealerDeck);
+		showPlayerCards(playerDeck);
+	}
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+
+		HashMap<String, Integer> cardDeck = new HashMap<>();
+		putCard(cardDeck);
 
 		int currentChips = 300;
 
@@ -93,10 +140,21 @@ public class BlackJack {
 
 			switch (mainMenuSelection) {
 			case 1:
+				ArrayList<Integer> dealerDeck = new ArrayList<>();
+				ArrayList<Integer> playerDeck = new ArrayList<>();
 
+				int dealerPoint = 0;
+				int playerPoint = 0;
+
+				System.out.println("베팅 금액을 설정해주세요.");
+				System.out.print(">>> ");
+				int placedBet = sc.nextInt();
+				
+				opening(cardDeck, dealerDeck, playerDeck);
+				
 				break;
 			case 2:
-				System.out.println("현재 소지 칩: " + currentChips + "$\n");
+				System.out.println("현재 소지 칩: " + currentChips + " $\n");
 
 				int innerWhileSwitch = 0;
 				while (innerWhileSwitch == 0) {
@@ -108,8 +166,8 @@ public class BlackJack {
 						System.out.println("충전할 칩의 개수를 입력해주세요.");
 						System.out.print(">>> ");
 						int addChips = sc.nextInt();
-						System.out.println(addChips+"개의 칩이 충전되었습니다.\n");
-						
+						System.out.println(addChips + "개의 칩이 충전되었습니다.\n");
+
 						currentChips += addChips;
 						innerWhileSwitch++;
 						break;
