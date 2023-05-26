@@ -87,29 +87,21 @@ public class BlackJack {
 			) {
 		System.out.print("Player: ");
 		for (int i = 0; i < cardHands.size(); i++) {
-			if(i>=cardHands.size()) {
-				System.out.print(cardHands.get(i));
-			}else {
-				System.out.print(cardHands.get(i)+", ");
-			}
+			System.out.print(cardHands.get(i) + " ");
 		}
 		System.out.println();
 	}
 	public static void showDealerCards(
 			ArrayList<Integer> cardHands
 			) {
-		System.out.print("Dealer: ?, ");
+		System.out.print("Dealer: ? ");
 		for (int i = 0; i < cardHands.size(); i++) {
-			if(i>=cardHands.size()) {
-				System.out.print(cardHands.get(i));
-			}else {
-				System.out.print(cardHands.get(i)+", ");
-			}
+			System.out.print(cardHands.get(i) + " ");
 		}
 		System.out.println();
 	}
 	public static void opening(
-			HashMap<String, Integer> cardDeck,
+			HashMap<String, Integer> cardDeck, 
 			ArrayList<Integer> dealerDeck,
 			ArrayList<Integer> playerDeck
 			) {
@@ -120,6 +112,14 @@ public class BlackJack {
 
 		showDealerCards(dealerDeck);
 		showPlayerCards(playerDeck);
+	}
+	public static int pointCalculator (ArrayList<Integer> cardHands) {
+		int point = 0;
+		for(int i = 0;i<cardHands.size();i++) {
+			
+		}
+		//카드 더해서 포인트로 반환
+		return point;
 	}
 	
 	public static void main(String[] args) {
@@ -142,16 +142,15 @@ public class BlackJack {
 			case 1:
 				ArrayList<Integer> dealerDeck = new ArrayList<>();
 				ArrayList<Integer> playerDeck = new ArrayList<>();
-
-				int dealerPoint = 0;
-				int playerPoint = 0;
+				int dealerPoint = pointCalculator(dealerDeck);
+				int playerPoint = pointCalculator(playerDeck);
 
 				System.out.println("베팅 금액을 설정해주세요.");
 				System.out.print(">>> ");
 				int placedBet = sc.nextInt();
-				
+
 				opening(cardDeck, dealerDeck, playerDeck);
-				
+
 				break;
 			case 2:
 				System.out.println("현재 소지 칩: " + currentChips + " $\n");
