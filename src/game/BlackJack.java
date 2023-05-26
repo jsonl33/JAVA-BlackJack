@@ -67,19 +67,23 @@ public class BlackJack {
 		cardDeck.put("♠K", 10);
 		cardDeck.put("♠ACE", 11);
 	}
-	public static int currentPoint(
+	public static int pointCalculator(
 			ArrayList<Integer> playingDeck,
 			int currentPoint
 			) {
-		for(int i = 0;i<playingDeck.size();i++) {
-			currentPoint += playingDeck.get(i);
+		if(currentPoint == 0) {
+			for(int i = 0;i<playingDeck.size();i++) {
+				currentPoint += playingDeck.get(i);
+			}
+		}else if(currentPoint != 0) {
+			int lastIndex = playingDeck.size()-1; 
+			currentPoint += playingDeck.get(lastIndex);
 		}
 		return currentPoint;
 	}
-	public static void hit(
+	public static void drawCard(
 			HashMap<String, Integer> cardDeck, 
-			ArrayList<Integer> playingDeck,
-			int currentPoint
+			ArrayList<Integer> playingDeck
 			) {
 		Random randomNum = new Random();
 		Set<String> keySet = cardDeck.keySet();
@@ -110,9 +114,22 @@ public class BlackJack {
 		}
 		System.out.println();
 	}
+	public static void opening(
+			HashMap<String, Integer> cardDeck,
+			ArrayList<Integer> dealerDeck,
+			ArrayList<Integer> playerDeck
+			) {
+		drawCard(cardDeck, dealerDeck);
+		drawCard(cardDeck, playerDeck);
+		drawCard(cardDeck, dealerDeck);
+		drawCard(cardDeck, playerDeck);
+
+		showDealerCards(dealerDeck);
+		showPlayerCards(playerDeck);
+	}
 	
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+		Scanner input = new Scanner(System.in);
 
 		HashMap<String, Integer> cardDeck = new HashMap<>();
 		putCard(cardDeck);
@@ -125,7 +142,7 @@ public class BlackJack {
 			System.out.println("2. 칩 확인");
 			System.out.println("3. 종료");
 			System.out.print(">>> ");
-			int mainMenuSelection = sc.nextInt();
+			int mainMenuSelection = input.nextInt();
 
 			switch (mainMenuSelection) {
 			case 1:
@@ -133,22 +150,19 @@ public class BlackJack {
 				ArrayList<Integer> playerDeck = new ArrayList<>();
 				int dealerPoint = 0;
 				int playerPoint = 0;
-
+				
 				System.out.println("베팅 금액을 설정해주세요.");
 				System.out.print(">>> ");
-				int placedBet = sc.nextInt();
-
-				hit(cardDeck, dealerDeck, dealerPoint);
-				hit(cardDeck, playerDeck, playerPoint);
-				hit(cardDeck, dealerDeck, dealerPoint);
-				hit(cardDeck, playerDeck, playerPoint);
-
-				showDealerCards(dealerDeck);
-				showPlayerCards(playerDeck);
-
-				System.out.println(currentPoint(playerDeck, playerPoint));
-				System.out.println(currentPoint(dealerDeck, dealerPoint));
-
+				int placedBet = input.nextInt();
+				
+				opening(cardDeck, dealerDeck, playerDeck);
+				
+				dealerPoint += pointCalculator(dealerDeck, dealerPoint);
+				playerPoint += pointCalculator(playerDeck, playerPoint);
+				
+				System.out.println(dealerPoint);
+				System.out.println(playerPoint);
+				
 				break;
 			case 2:
 				System.out.println("현재 소지 칩: " + currentChips + " $\n");
@@ -157,12 +171,12 @@ public class BlackJack {
 				while (innerWhileSwitch == 0) {
 					System.out.println("1.칩 충전\t2.메인화면");
 					System.out.print(">>> ");
-					int chipSelect = sc.nextInt();
+					int chipSelect = input.nextInt();
 					switch (chipSelect) {
 					case 1:
 						System.out.println("충전할 칩의 개수를 입력해주세요.");
 						System.out.print(">>> ");
-						int addChips = sc.nextInt();
+						int addChips = input.nextInt();
 						System.out.println(addChips + "개의 칩이 충전되었습니다.\n");
 
 						currentChips += addChips;
@@ -177,7 +191,7 @@ public class BlackJack {
 				break;
 			case 3:
 				System.out.println("게임을 종료합니다.");
-				sc.close();
+				input.close();
 				return;
 			}
 		}
